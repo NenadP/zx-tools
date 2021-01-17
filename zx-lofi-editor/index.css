@@ -1,0 +1,123 @@
+html {
+    background-color: #e7e7e7;
+}
+
+#canvas {
+    width: 640px;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+#canvas, #colors, #bg_colors, #tools {
+    display: block;
+    clear: both;
+    padding: 10px;
+    padding-bottom: 20px;
+}
+
+
+#colors .palette-item, #bg_colors .palette-item {
+    float: left;
+}
+
+.palette-item {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+
+.palette-item:hover {
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    border: 1px solid black;
+}
+
+.palette-item.selected::after {
+    content: "*";
+    color: #868686;
+    font-size: 20px;
+}
+
+#bg-black, #c-black, .c-black .bit1, .bg-black .bit0 {
+    background-color: #000000;
+}
+
+#bg-blue, #c-blue , .c-blue .bit1, .bg-blue .bit0 {
+    background-color: #0022c7;
+}
+
+#bg-blue-br, #c-blue-br , .c-blue-br .bit1, .bg-blue-br .bit0 {
+    background-color: #002bfb;
+}
+
+#bg-red, #c-red , .c-red .bit1, .bg-red .bit0 {
+    background-color: #d62816;
+}
+
+#bg-red-br, #c-red-br , .c-red-br .bit1, .bg-red-br .bit0 {
+    background-color: #ff331c;
+}
+
+#bg-pink, #c-pink , .c-pink .bit1, .bg-pink .bit0 {
+    background-color: #d433c7;
+}
+
+#bg-pink-br, #c-pink-br , .c-pink-br .bit1, .bg-pink-br .bit0 {
+    background-color: #ff40fc;
+}
+
+#bg-green, #c-green , .c-green .bit1, .bg-green .bit0 {
+    background-color: #00c525;
+}
+
+#bg-green-br, #c-green-br , .c-green-br .bit1, .bg-green-br .bit0 {
+    background-color: #00f92f;
+}
+
+#bg-cyan, #c-cyan , .c-cyan .bit1, .bg-cyan .bit0 {
+    background-color: #00c7c9;
+}
+
+#bg-cyan-br, #c-cyan-br , .c-cyan-br .bit1, .bg-cyan-br .bit0 {
+    background-color: #00fbfe;
+}
+
+#bg-yellow, #c-yellow , .c-yellow .bit1, .bg-yellow .bit0 {
+    background-color: #ccc82a;
+}
+
+#bg-yellow-br, #c-yellow-br , .c-yellow-br .bit1, .bg-yellow-br .bit0 {
+    background-color: #fffc36;
+}
+
+#bg-white, #c-white , .c-white .bit1, .bg-white .bit0 {
+    background-color: #cacaca;
+}
+
+#bg-white-br, #c-white-br , .c-white-br .bit1, .bg-white-br .bit0 {
+    background-color: #ffffff;
+}
+
+
+.character {
+    float: left;
+    width: 20px;
+    height: 20px;
+}
+
+#canvas .bit0, #canvas .bit1 {
+    float: left;
+    width: 10px;
+    height: 10px;
+}
+#canvas .bit0:hover, #canvas .bit1:hover {
+    width: 8px;
+    height: 8px;
+    border: 1px solid #868686;
+}
+
+
+
