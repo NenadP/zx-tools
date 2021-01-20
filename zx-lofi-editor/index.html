@@ -5,48 +5,49 @@
 </head>
 <body>
 
+
+<p>Canvas size</p>
+<small>This is number of characters. Max: width: 32, height: 64. Resizing it destroys previous canvas.</small>
+<div id="canvas-size">
+    <label for="canvas-width">width: </label> <input type="number" id="canvas-width" value="32">
+    <label for="canvas-height">height: </label> <input type="number" id="canvas-height" value="24">
+    <button id="canvas-resize">resize</button>
+</div>
+
+<p>Brightness</p>
+<div id="brightness">
+    <button id="brightness-button">normal</button>
+</div>
+
 <p>Char colour</p>
 <div id="colors">
     <div id="c-black" class="palette-item selected"></div>
     <div id="c-blue" class="palette-item"></div>
-    <div id="c-blue-br" class="palette-item"></div>
     <div id="c-red" class="palette-item"></div>
-    <div id="c-red-br" class="palette-item"></div>
     <div id="c-pink" class="palette-item"></div>
-    <div id="c-pink-br" class="palette-item"></div>
     <div id="c-green" class="palette-item"></div>
-    <div id="c-green-br" class="palette-item"></div>
     <div id="c-cyan" class="palette-item"></div>
-    <div id="c-cyan-br" class="palette-item"></div>
     <div id="c-yellow" class="palette-item"></div>
-    <div id="c-yellow-br" class="palette-item"></div>
     <div id="c-white" class="palette-item"></div>
-    <div id="c-white-br" class="palette-item"></div>
 </div>
 
 <p>Background colour</p>
 <div id="bg_colors">
     <div id="bg-black" class="palette-item"></div>
     <div id="bg-blue" class="palette-item"></div>
-    <div id="bg-blue-br" class="palette-item"></div>
     <div id="bg-red" class="palette-item"></div>
-    <div id="bg-red-br" class="palette-item"></div>
     <div id="bg-pink" class="palette-item"></div>
-    <div id="bg-pink-br" class="palette-item"></div>
     <div id="bg-green" class="palette-item"></div>
-    <div id="bg-green-br" class="palette-item"></div>
     <div id="bg-cyan" class="palette-item"></div>
-    <div id="bg-cyan-br" class="palette-item"></div>
     <div id="bg-yellow" class="palette-item"></div>
-    <div id="bg-yellow-br" class="palette-item"></div>
-    <div id="bg-white" class="palette-item"></div>
-    <div id="bg-white-br" class="palette-item selected"></div>
+    <div id="bg-white" class="palette-item selected"></div>
 </div>
 
 <p>Tools</p>
 <div id="tools">
     <button id="tool-pen">Pen</button>
     <button id="tool-eraser">Eraser</button>
+    <button id="tool-undo">Undo</button>
 </div>
 
 <div id="canvas"></div>

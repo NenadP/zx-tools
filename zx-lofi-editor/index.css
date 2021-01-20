@@ -10,7 +10,11 @@ p {
     margin-bottom: 0;
 }
 
-#canvas, #colors, #bg_colors, #tools {
+#canvas-size input {
+    width: 100px;
+}
+
+#canvas, #colors, #bg_colors, #tools, #brightness, #canvas-size {
     display: block;
     clear: both;
     padding: 10px;
@@ -45,67 +49,67 @@ p {
     background-color: #000000;
 }
 
-#bg-blue, #c-blue , .c-blue .bit1, .bg-blue .bit0 {
+#bg-blue, #c-blue, .c-blue .bit1, .bg-blue .bit0 {
     background-color: #0022c7;
 }
 
-#bg-blue-br, #c-blue-br , .c-blue-br .bit1, .bg-blue-br .bit0 {
+.palette-bright #bg-blue, .palette-bright #c-blue , .c-blue.br .bit1, .bg-blue.br .bit0 {
     background-color: #002bfb;
 }
 
-#bg-red, #c-red , .c-red .bit1, .bg-red .bit0 {
+#bg-red, #c-red, .c-red .bit1, .bg-red .bit0 {
     background-color: #d62816;
 }
 
-#bg-red-br, #c-red-br , .c-red-br .bit1, .bg-red-br .bit0 {
+.palette-bright #bg-red, .palette-bright #c-red, .c-red.br .bit1, .bg-red.br .bit0 {
     background-color: #ff331c;
 }
 
-#bg-pink, #c-pink , .c-pink .bit1, .bg-pink .bit0 {
+#bg-pink, #c-pink, .c-pink .bit1, .bg-pink .bit0 {
     background-color: #d433c7;
 }
 
-#bg-pink-br, #c-pink-br , .c-pink-br .bit1, .bg-pink-br .bit0 {
+.palette-bright #bg-pink, .palette-bright #c-pink, .c-pink.br .bit1, .bg-pink.br .bit0 {
     background-color: #ff40fc;
 }
 
-#bg-green, #c-green , .c-green .bit1, .bg-green .bit0 {
+#bg-green, #c-green, .c-green .bit1, .bg-green .bit0 {
     background-color: #00c525;
 }
 
-#bg-green-br, #c-green-br , .c-green-br .bit1, .bg-green-br .bit0 {
+.palette-bright #bg-green, .palette-bright #c-green, .c-green.br .bit1, .bg-green.br .bit0 {
     background-color: #00f92f;
 }
 
-#bg-cyan, #c-cyan , .c-cyan .bit1, .bg-cyan .bit0 {
+#bg-cyan, #c-cyan, .c-cyan .bit1, .bg-cyan .bit0 {
     background-color: #00c7c9;
 }
 
-#bg-cyan-br, #c-cyan-br , .c-cyan-br .bit1, .bg-cyan-br .bit0 {
+.palette-bright #bc-cyan, .palette-bright #c-cyan, .c-cyan.br .bit1, .bg-cyan.br .bit0 {
     background-color: #00fbfe;
 }
 
-#bg-yellow, #c-yellow , .c-yellow .bit1, .bg-yellow .bit0 {
+#bg-yellow, #c-yellow, .c-yellow .bit1, .bg-yellow .bit0 {
     background-color: #ccc82a;
 }
 
-#bg-yellow-br, #c-yellow-br , .c-yellow-br .bit1, .bg-yellow-br .bit0 {
+.palette-bright #bg-yellow, .palette-bright #c-yellow, .c-yellow.br .bit1, .bg-yellow.br .bit0 {
     background-color: #fffc36;
 }
 
-#bg-white, #c-white , .c-white .bit1, .bg-white .bit0 {
+#bg-white, #c-white, .c-white .bit1, .bg-white .bit0 {
     background-color: #cacaca;
 }
 
-#bg-white-br, #c-white-br , .c-white-br .bit1, .bg-white-br .bit0 {
+.palette-bright #bg-white, .palette-bright #c-white, .c-white.br .bit1, .bg-white.br .bit0 {
     background-color: #ffffff;
 }
-
 
 .character {
     float: left;
     width: 20px;
     height: 20px;
+    outline:1px #9fb0c6 solid;
 }
 
 #canvas .bit0, #canvas .bit1 {
