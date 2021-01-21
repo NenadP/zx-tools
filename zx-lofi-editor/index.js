@@ -10,14 +10,20 @@ class LoFiEditor {
     isPainting = false;
     brightness = '0';
     width = 32;
-    height= 24;
+    height = 24;
 
     constructor() {
 
         this.setBrightness();
         this.setTools();
         this.setResize();
-        this.createCanvas(this.width, this.height);
+        this.setExport();
+
+        this.createData(this.width, this.height);
+
+        //  this.saveDataToHistory();
+
+        this.createCanvas(this.data);
     }
 
     setBrightness() {
@@ -69,8 +75,6 @@ class LoFiEditor {
         })
 
         undo.addEventListener("click", (e) => {
-            // this.canvas.innerHTML = '';
-            // this.canvas.append(...this.history.pop());
             this.undo();
         });
 
@@ -99,9 +103,50 @@ class LoFiEditor {
         }
 
         resize.addEventListener("click", () => {
-            if (width.value <= 32 && height.value <=24) {
+            if (width.value <= 32 && height.value <= 24) {
                 this.createCanvas(this.width, this.height);
             }
+        })
+    }
+
+    setExport() {
+
+        const exportButton = document.getElementById("export-button");
+        const exportCharacterData = document.getElementById("export-character-data");
+        const exportAttributeData = document.getElementById("export-attribute-data");
+
+
+        exportButton.addEventListener("click", () => {
+
+            let characterData = '';
+
+            let pointer = 0;
+            let byte = '';
+
+            this.data.forEach(item => {
+
+                if (pointer === 0) {
+                    characterData += "defb ";
+                }
+
+                byte += item.bits;
+
+                if (byte.length === 8) {
+                    characterData += parseInt(byte, 2);
+                    byte = '';
+                }
+
+                pointer++;
+
+                if (pointer === 32) {
+                    characterData += '\n';
+                    pointer = 0;
+                } else if (byte.length === 0) {
+                    characterData += ',';
+                }
+            });
+
+            exportCharacterData.textContent = characterData;
         })
     }
 
@@ -142,19 +187,10 @@ class LoFiEditor {
 
     paint(pixel, attribute) {
 
-        const map = {
-            'black': '000',
-            'blue': '001',
-            'red': '010',
-            'pink': '011',
-            'green': '100',
-            'cyan': '101',
-            'yellow': '110',
-            'white': '111',
-        }
+        const map = this.getBinaryFromColors();
 
         attribute.setAttribute("class", 'character' + ' c-' + this.color + ' bg-' + this.bgColor + ' ' +
-            (this.brightness === '1' ? 'br' : '')) ;
+            (this.brightness === '1' ? 'br' : ''));
 
         attribute.setAttribute('color', map[this.color]);
         attribute.setAttribute('bgColor', map[this.bgColor]);
@@ -188,7 +224,6 @@ class LoFiEditor {
 
         let uid = attribute.getAttribute("uid");
 
-        console.log(uid);
         let match = this.data.find((item) => item.uid === uid);
 
         if (match) {
@@ -197,28 +232,16 @@ class LoFiEditor {
             match.bgColor = attribute.getAttribute("bgColor");
             match.bits = attribute.getAttribute("bits");
         }
-
-        console.log(this.data);
     }
 
-    createCanvas(width, height) {
-
-        this.canvas.innerHTML = '';
-        this.data = [];
-
-        for(let i = 0; i < width * height; i++) {
-
-        }
-
-        this.canvas.setAttribute("style","width:" + (width * 20) + 'px');
-
+    createData(width, height) {
+        
         for (let i = 0; i < height; i++) {
 
             for (let j = 0; j < width; j++) {
 
                 const uid = j + 'x' + i;
 
-                // TODO: extract to separate loop. Load below class/nodes definitions based on data provided
                 this.data.push({
                     uid,
                     brightness: '0',
@@ -226,64 +249,108 @@ class LoFiEditor {
                     color: '000',
                     bgColor: '111'
                 })
-
-                const attribute = document.createElement("div", {});
-
-                attribute.setAttribute("class", "character c-black bg-white");
-                attribute.setAttribute("uid", uid);
-                attribute.setAttribute("color", '000');
-                attribute.setAttribute("bgColor", '111');
-                attribute.setAttribute("brightness", '0');
-
-                attribute.addEventListener("mouseover", (e)=> {
-
-                    e.stopPropagation();
-                    if (!this.isPainting) return;
-                    attribute.setAttribute("class", 'character' + ' c-' + this.color + ' bg-' + this.bgColor);
-                })
-
-                for (let k = 0; k < 4; k++) {
-
-                    const pixel = document.createElement("div");
-                    attribute.appendChild(pixel);
-
-                    pixel.setAttribute("class", "bit0");
-                    pixel.setAttribute("bit",0);
-
-                    pixel.addEventListener("mousemove", (e)=> {
-
-                        if (!this.isPainting) return;
-
-                        this.paint(pixel, attribute);
-                    })
-
-                    pixel.addEventListener("mousedown", (e)=> {
-
-                        e.preventDefault();
-                        this.isPainting = true;
-
-                        this.paint(pixel, attribute);
-                    })
-
-                    pixel.addEventListener("mouseup", (e)=> {
-
-                        e.preventDefault();
-
-                        this.history.push(this.data);
-
-                        this.isPainting = false;
-                    })
-                }
-
-                this.canvas.appendChild(attribute);
             }
         }
     }
 
+    createCanvas(data) {
+
+        this.canvas.innerHTML = '';
+
+        this.canvas.setAttribute("style", "width:" + (this.width * 20) + 'px');
+
+        data.forEach(item => {
+
+            const map = this.getColorsFromBinary();
+
+            const attribute = document.createElement("div", {});
+
+            attribute.setAttribute("class", `character c-${map[item.color]} bg-${map[item.bgColor]}`);
+            attribute.setAttribute("uid", item.uid);
+            attribute.setAttribute("color", item.color);
+            attribute.setAttribute("bgColor", item.bgColor);
+            attribute.setAttribute("brightness", item.brightness);
+
+            attribute.addEventListener("mouseover", (e) => {
+
+                e.stopPropagation();
+                if (!this.isPainting) return;
+                attribute.setAttribute("class", 'character' + ' c-' + this.color + ' bg-' + this.bgColor);
+            })
+
+            for (let k = 0; k < 4; k++) {
+
+                const pixel = document.createElement("div");
+                attribute.appendChild(pixel);
+
+                pixel.setAttribute("class", `bit${item.bits.charAt(k)}`);
+                pixel.setAttribute("bit", item.bits.charAt(k));
+
+                pixel.addEventListener("mousemove", (e) => {
+
+                    if (!this.isPainting) return;
+
+                    this.paint(pixel, attribute);
+                })
+
+                pixel.addEventListener("mousedown", (e) => {
+                    this.saveDataToHistory();
+                    e.preventDefault();
+                    this.isPainting = true;
+
+                    this.paint(pixel, attribute);
+                })
+
+                pixel.addEventListener("mouseup", (e) => {
+
+                    e.preventDefault();
+
+
+                    this.isPainting = false;
+                })
+            }
+
+            this.canvas.appendChild(attribute);
+        });
+    }
+
+    saveDataToHistory() {
+        this.history.push(this.data.map(a => ({...a})));
+    }
+
     undo() {
-        this.canvas.childNodes.forEach(node=> {
-            // TODO - recreate from data
-        })
+        if (this.history.length === 0) {
+            return;
+        }
+
+        this.data = this.history.pop();
+        this.createCanvas(this.data);
+    }
+
+    getColorsFromBinary() {
+        return {
+            '000': 'black',
+            '001': 'blue',
+            '010': 'red',
+            '011': 'pink',
+            '100': 'green',
+            '101': 'cyan',
+            '110': 'yellow',
+            '111': 'white',
+        }
+    }
+
+    getBinaryFromColors() {
+        return {
+            'black': '000',
+            'blue': '001',
+            'red': '010',
+            'pink': '011',
+            'green': '100',
+            'cyan': '101',
+            'yellow': '110',
+            'white': '111',
+        }
     }
 }
 

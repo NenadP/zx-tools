@@ -14,7 +14,7 @@ p {
     width: 100px;
 }
 
-#canvas, #colors, #bg_colors, #tools, #brightness, #canvas-size {
+#canvas, #colors, #bg_colors, #tools, #brightness, #canvas-size, #export {
     display: block;
     clear: both;
     padding: 10px;
@@ -123,5 +123,8 @@ p {
     border: 1px solid #868686;
 }
 
-
+#export textarea {
+    display: block;
+    width: 600px;
+}
 
