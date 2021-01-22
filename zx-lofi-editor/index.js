@@ -4,8 +4,8 @@ class LoFiEditor {
     data = [];
     history = [];
 
-    color = 'black';
-    bgColor = 'white';
+    ink = 'black';
+    paper = 'white';
     tool = 'pen';
     isPainting = false;
     brightness = '0';
@@ -21,8 +21,6 @@ class LoFiEditor {
 
         this.createData(this.width, this.height);
 
-        //  this.saveDataToHistory();
-
         this.createCanvas(this.data);
     }
 
@@ -36,15 +34,15 @@ class LoFiEditor {
 
             toggle.innerText = this.brightness === '1' ? 'bright' : 'normal';
 
-            const colors = document.getElementById("colors");
-            const bgColors = document.getElementById("bg_colors");
+            const inks = document.getElementById("inks");
+            const papers = document.getElementById("bg_inks");
 
             if (this.brightness === '1') {
-                colors.setAttribute("class", "palette-bright");
-                bgColors.setAttribute("class", "palette-bright");
+                inks.setAttribute("class", "palette-bright");
+                papers.setAttribute("class", "palette-bright");
             } else {
-                colors.removeAttribute("class");
-                bgColors.removeAttribute("class");
+                inks.removeAttribute("class");
+                papers.removeAttribute("class");
             }
         });
     }
@@ -104,7 +102,8 @@ class LoFiEditor {
 
         resize.addEventListener("click", () => {
             if (width.value <= 32 && height.value <= 24) {
-                this.createCanvas(this.width, this.height);
+                this.resizeData(width.value, height.value, this.data);
+                this.createCanvas(this.data);
             }
         })
     }
@@ -112,52 +111,89 @@ class LoFiEditor {
     setExport() {
 
         const exportButton = document.getElementById("export-button");
-        const exportCharacterData = document.getElementById("export-character-data");
-        const exportAttributeData = document.getElementById("export-attribute-data");
-
 
         exportButton.addEventListener("click", () => {
 
-            let characterData = '';
+            this.exportCharacterData();
+            this.exportAttributeData();
+        });
+    }
 
-            let pointer = 0;
-            let byte = '';
+    exportCharacterData() {
 
-            this.data.forEach(item => {
+        const exportCharacterData = document.getElementById("export-character-data");
 
-                if (pointer === 0) {
-                    characterData += "defb ";
-                }
+        let characterData = '';
 
-                byte += item.bits;
+        let pointer = 0;
+        let byte = '';
 
-                if (byte.length === 8) {
-                    characterData += parseInt(byte, 2);
-                    byte = '';
-                }
+        this.data.forEach(item => {
 
-                pointer++;
+            if (pointer === 0) {
+                characterData += "defb ";
+            }
 
-                if (pointer === 32) {
-                    characterData += '\n';
-                    pointer = 0;
-                } else if (byte.length === 0) {
-                    characterData += ',';
-                }
-            });
+            byte += item.bits;
 
-            exportCharacterData.textContent = characterData;
-        })
+            if (byte.length === 8) {
+                characterData += parseInt(byte, 2);
+                byte = '';
+            }
+
+            pointer++;
+
+            if (pointer === 32) {
+                characterData += '\n';
+                pointer = 0;
+            } else if (byte.length === 0) {
+                characterData += ',';
+            }
+        });
+
+        exportCharacterData.textContent = characterData;
+    }
+
+    exportAttributeData() {
+
+        const exportAttributeData = document.getElementById("export-attribute-data");
+
+        let attributeData = '';
+
+        let pointer = 0;
+        let byte = '';
+
+        this.data.forEach(item => {
+
+            if (pointer === 0) {
+                attributeData += "defb ";
+            }
+
+            const flash = '0';
+
+            attributeData += parseInt(`${flash}${item.brightness}${item.paper}${item.ink}`, 2);
+
+            pointer++;
+
+            if (pointer === 32) {
+                attributeData += '\n';
+                pointer = 0;
+            } else if (byte.length === 0) {
+                attributeData += ',';
+            }
+        });
+
+        exportAttributeData.textContent = attributeData;
     }
 
     createPaletteColorItem(id) {
 
-        const item = document.getElementById('c-' + id);
+        const item = document.getElementById('ink-' + id);
         item.addEventListener("click", () => {
 
-            this.color = id;
+            this.ink = id;
 
-            const parent = document.getElementById('colors');
+            const parent = document.getElementById('ink');
 
             parent.childNodes.forEach((node) => {
                 node.className = 'palette-item';
@@ -170,12 +206,12 @@ class LoFiEditor {
 
     createPaletteBgItem(id) {
 
-        const item = document.getElementById('bg-' + id);
+        const item = document.getElementById('paper-' + id);
 
         item.addEventListener("click", () => {
-            this.bgColor = id;
+            this.paper = id;
 
-            const parent = document.getElementById('bg_colors');
+            const parent = document.getElementById('paper');
 
             parent.childNodes.forEach((node) => {
                 node.className = 'palette-item';
@@ -189,11 +225,11 @@ class LoFiEditor {
 
         const map = this.getBinaryFromColors();
 
-        attribute.setAttribute("class", 'character' + ' c-' + this.color + ' bg-' + this.bgColor + ' ' +
+        attribute.setAttribute("class", 'character' + ' ink-' + this.ink + ' paper-' + this.paper + ' ' +
             (this.brightness === '1' ? 'br' : ''));
 
-        attribute.setAttribute('color', map[this.color]);
-        attribute.setAttribute('bgColor', map[this.bgColor]);
+        attribute.setAttribute('ink', map[this.ink]);
+        attribute.setAttribute('paper', map[this.paper]);
         attribute.setAttribute('brightness', this.brightness);
 
         if (this.tool === 'pen') {
@@ -228,8 +264,8 @@ class LoFiEditor {
 
         if (match) {
             match.brightness = attribute.getAttribute("brightness");
-            match.color = attribute.getAttribute("color");
-            match.bgColor = attribute.getAttribute("bgColor");
+            match.ink = attribute.getAttribute("ink");
+            match.paper = attribute.getAttribute("paper");
             match.bits = attribute.getAttribute("bits");
         }
     }
@@ -246,9 +282,37 @@ class LoFiEditor {
                     uid,
                     brightness: '0',
                     bits: '0000',
-                    color: '000',
-                    bgColor: '111'
+                    ink: '000',
+                    paper: '111'
                 })
+            }
+        }
+    }
+
+    resizeData(width, height, data) {
+
+        const dataCopy = this.getArrayClone(data);
+
+        this.data = [];
+        for (let i = 0; i < height; i++) {
+
+            for (let j = 0; j < width; j++) {
+
+                const uid = j + 'x' + i;
+
+                const match = dataCopy.find(item => item.uid === uid);
+
+                if (match) {
+                    this.data.push(match);
+                } else {
+                    this.data.push({
+                        uid,
+                        brightness: '0',
+                        bits: '0000',
+                        ink: '000',
+                        paper: '111'
+                    })
+                }
             }
         }
     }
@@ -265,17 +329,17 @@ class LoFiEditor {
 
             const attribute = document.createElement("div", {});
 
-            attribute.setAttribute("class", `character c-${map[item.color]} bg-${map[item.bgColor]}`);
+            attribute.setAttribute("class", `character ink-${map[item.ink]} paper-${map[item.paper]}`);
             attribute.setAttribute("uid", item.uid);
-            attribute.setAttribute("color", item.color);
-            attribute.setAttribute("bgColor", item.bgColor);
+            attribute.setAttribute("ink", item.ink);
+            attribute.setAttribute("paper", item.paper);
             attribute.setAttribute("brightness", item.brightness);
 
             attribute.addEventListener("mouseover", (e) => {
 
                 e.stopPropagation();
                 if (!this.isPainting) return;
-                attribute.setAttribute("class", 'character' + ' c-' + this.color + ' bg-' + this.bgColor);
+                attribute.setAttribute("class", 'character' + ' ink-' + this.ink + ' paper-' + this.paper);
             })
 
             for (let k = 0; k < 4; k++) {
@@ -315,7 +379,15 @@ class LoFiEditor {
     }
 
     saveDataToHistory() {
-        this.history.push(this.data.map(a => ({...a})));
+        this.history.push({
+            width: this.width,
+            height: this.height,
+            data: this.data.map(a => ({...a}))
+        });
+    }
+
+    getArrayClone(data) {
+        return data.map(a => ({...a}));
     }
 
     undo() {
@@ -323,7 +395,18 @@ class LoFiEditor {
             return;
         }
 
-        this.data = this.history.pop();
+        const lastHistoryEntry = this.history.pop();
+
+        this.data = lastHistoryEntry.data;
+        this.width = lastHistoryEntry.width;
+        this.height = lastHistoryEntry.height;
+
+        const widthElement = document.getElementById("canvas-width");
+        const heightElement = document.getElementById("canvas-height");
+
+        widthElement.value = lastHistoryEntry.width;
+        heightElement.value = lastHistoryEntry.height;
+
         this.createCanvas(this.data);
     }
 

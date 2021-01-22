@@ -14,7 +14,7 @@ p {
     width: 100px;
 }
 
-#canvas, #colors, #bg_colors, #tools, #brightness, #canvas-size, #export {
+#canvas, #ink, #paper, #tools, #brightness, #canvas-size, #export {
     display: block;
     clear: both;
     padding: 10px;
@@ -22,7 +22,7 @@ p {
 }
 
 
-#colors .palette-item, #bg_colors .palette-item {
+#ink .palette-item, #paper .palette-item {
     float: left;
 }
 
@@ -45,63 +45,63 @@ p {
     font-size: 20px;
 }
 
-#bg-black, #c-black, .c-black .bit1, .bg-black .bit0 {
+#paper-black, #ink-black, .ink-black .bit1, .paper-black .bit0 {
     background-color: #000000;
 }
 
-#bg-blue, #c-blue, .c-blue .bit1, .bg-blue .bit0 {
+#paper-blue, #ink-blue, .ink-blue .bit1, .paper-blue .bit0 {
     background-color: #0022c7;
 }
 
-.palette-bright #bg-blue, .palette-bright #c-blue , .c-blue.br .bit1, .bg-blue.br .bit0 {
+.palette-bright #paper-blue, .palette-bright #ink-blue , .ink-blue.br .bit1, .paper-blue.br .bit0 {
     background-color: #002bfb;
 }
 
-#bg-red, #c-red, .c-red .bit1, .bg-red .bit0 {
+#paper-red, #ink-red, .ink-red .bit1, .paper-red .bit0 {
     background-color: #d62816;
 }
 
-.palette-bright #bg-red, .palette-bright #c-red, .c-red.br .bit1, .bg-red.br .bit0 {
+.palette-bright #paper-red, .palette-bright #ink-red, .ink-red.br .bit1, .paper-red.br .bit0 {
     background-color: #ff331c;
 }
 
-#bg-pink, #c-pink, .c-pink .bit1, .bg-pink .bit0 {
+#paper-pink, #ink-pink, .ink-pink .bit1, .paper-pink .bit0 {
     background-color: #d433c7;
 }
 
-.palette-bright #bg-pink, .palette-bright #c-pink, .c-pink.br .bit1, .bg-pink.br .bit0 {
+.palette-bright #paper-pink, .palette-bright #ink-pink, .ink-pink.br .bit1, .paper-pink.br .bit0 {
     background-color: #ff40fc;
 }
 
-#bg-green, #c-green, .c-green .bit1, .bg-green .bit0 {
+#paper-green, #ink-green, .ink-green .bit1, .paper-green .bit0 {
     background-color: #00c525;
 }
 
-.palette-bright #bg-green, .palette-bright #c-green, .c-green.br .bit1, .bg-green.br .bit0 {
+.palette-bright #paper-green, .palette-bright #ink-green, .ink-green.br .bit1, .paper-green.br .bit0 {
     background-color: #00f92f;
 }
 
-#bg-cyan, #c-cyan, .c-cyan .bit1, .bg-cyan .bit0 {
+#paper-cyan, #ink-cyan, .ink-cyan .bit1, .paper-cyan .bit0 {
     background-color: #00c7c9;
 }
 
-.palette-bright #bc-cyan, .palette-bright #c-cyan, .c-cyan.br .bit1, .bg-cyan.br .bit0 {
+.palette-bright #paper-cyan, .palette-bright #ink-cyan, .ink-cyan.br .bit1, .paper-cyan.br .bit0 {
     background-color: #00fbfe;
 }
 
-#bg-yellow, #c-yellow, .c-yellow .bit1, .bg-yellow .bit0 {
+#paper-yellow, #ink-yellow, .ink-yellow .bit1, .paper-yellow .bit0 {
     background-color: #ccc82a;
 }
 
-.palette-bright #bg-yellow, .palette-bright #c-yellow, .c-yellow.br .bit1, .bg-yellow.br .bit0 {
+.palette-bright #paper-yellow, .palette-bright #ink-yellow, .ink-yellow.br .bit1, .paper-yellow.br .bit0 {
     background-color: #fffc36;
 }
 
-#bg-white, #c-white, .c-white .bit1, .bg-white .bit0 {
+#paper-white, #ink-white, .ink-white .bit1, .paper-white .bit0 {
     background-color: #cacaca;
 }
 
-.palette-bright #bg-white, .palette-bright #c-white, .c-white.br .bit1, .bg-white.br .bit0 {
+.palette-bright #paper-white, .palette-bright #ink-white, .ink-white.br .bit1, .paper-white.br .bit0 {
     background-color: #ffffff;
 }
 
