@@ -2,41 +2,61 @@ html {
     background-color: #e7e7e7;
 }
 
-#toolbar {
-
-}
-#toolbar p, #toolbar .tool-item {
-
-}
 #canvas {
     width: 640px;
+    margin: 30px;
+}
+
+h1 {
+    font-size: 20px;
+    padding: 20px 0 10px 30px;
 }
 
 p {
     margin-bottom: 0;
 }
 
-#canvas-size input {
-    width: 100px;
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: transparent;
 }
 
-#canvas, #ink, #paper, #tools, #brightness, #canvas-size, #export, #mode {
-    display: block;
-    clear: both;
+.navbar-text {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 11px;
 }
+
+#canvas-size input {
+    width: 60px;
+}
+
 
 .palette-item {
     cursor: pointer;
     width: 24px;
     height: 24px;
+    border: none;
+    outline: none;
+    border: 1px transparent;
+    box-sizing: border-box;
 }
-
 .palette-item:hover {
-    border: 1px solid black;
+
 }
 
 .palette-item.selected {
     border: 1px solid black;
+}
+
+.palette-item.selected::after {
+    content: "*";
+    color: #868686;
+    position: absolute;
+    top: -1px;
+    left: 7px;
+    font-size: 20px;
 }
 
 #paper-black, #ink-black, .ink-black .bit1, .paper-black .bit0 {
@@ -117,8 +137,15 @@ p {
     border: 1px solid #868686;
 }
 
+@media (min-width: 768px) {
+    .modal-xl {
+        width: 90%;
+        max-width:1050px;
+    }
+}
+
 #export textarea {
-    display: block;
-    width: 600px;
+    min-height: 400px;
+    min-width: 1000px;
 }
 

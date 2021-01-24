@@ -1,7 +1,13 @@
 class LoFiEditor {
 
     canvas = document.getElementById("canvas");
-    data = [];
+
+    data = {
+        width: 32,
+        height: 24,
+        map: []
+    };
+
     history = [];
 
     ink = 'black';
@@ -10,19 +16,35 @@ class LoFiEditor {
     mode = 'characters';
     isPainting = false;
     brightness = '0';
-    width = 32;
-    height = 24;
-    name = 'default';
+
+    updateCanvasCallback = (data) => {
+
+        this.data = data;
+        this.restoreDimensionsInputs();
+        this.createCanvas(this.data);
+    };
+
+    getDataCallBack = () => {
+
+        return this.data;
+    }
+    
 
     constructor() {
+
+        this.loFiExport = new LoFiExport({ getData: this.getDataCallBack })
+        this.loFiExport.setExport();
+
+        this.loFiIo = new LoFiIo({ onSave: this.getDataCallBack, onLoad: this.updateCanvasCallback });
+        this.loFiIo.setSave();
+        this.loFiIo.setLoad();
 
         this.setBrightness();
         this.setTools();
         this.setResize();
-        this.setExport();
         this.setMode();
 
-        this.createData(this.width, this.height);
+        this.createData(this.data.width, this.data.height);
 
         this.createCanvas(this.data);
     }
@@ -116,111 +138,20 @@ class LoFiEditor {
 
 
         width.oninput = () => {
-            this.width = parseInt(width.value, 10);
+            this.data.width = parseInt(width.value, 10);
         }
 
         height.oninput = () => {
-            this.height = parseInt(height.value, 10);
+            this.data.height = parseInt(height.value, 10);
         }
 
         resize.addEventListener("click", () => {
             if (width.value <= 32 && height.value <= 24) {
-                this.resizeData(width.value, height.value, this.data);
+                this.resizeData(this.data);
+                this.saveDataToHistory();
                 this.createCanvas(this.data);
             }
         })
-    }
-
-    setExport() {
-
-        const exportButton = document.getElementById("export-button");
-
-        const name = document.getElementById("export-name");
-
-
-        name.oninput = () => {
-            this.name = name.value;
-        }
-
-        exportButton.addEventListener("click", () => {
-
-            this.exportCharacterData();
-            this.exportAttributeData();
-        });
-    }
-
-    exportCharacterData() {
-
-        const exportCharacterData = document.getElementById("export-character-data");
-
-        let characterData = '';
-
-        let pointer = 0;
-        let byte = '';
-
-        characterData = `char_${this.name}:\n`;
-        characterData += `defb ${this.width},${this.height}\n`;
-        characterData += `defb 0,0\n`; // TODO: wire up x,y coords
-
-        this.data.forEach(item => {
-
-            if (pointer === 0) {
-                characterData += "defb ";
-            }
-
-            byte += item.bits;
-
-            if (byte.length === 8) {
-                characterData += parseInt(byte, 2);
-                byte = '';
-            }
-
-            pointer++;
-
-            if (pointer === this.width) {
-                characterData += '\n';
-                pointer = 0;
-            } else if (byte.length === 0) {
-                characterData += ',';
-            }
-        });
-
-        exportCharacterData.textContent = characterData;
-    }
-
-    exportAttributeData() {
-
-        const exportAttributeData = document.getElementById("export-attribute-data");
-
-        let attributeData = `attr_${this.name}:\n`;
-
-        let pointer = 0;
-        let byte = '';
-
-        attributeData += `defb ${this.width},${this.height}\n`;
-        attributeData += `defb 0,0\n`; // TODO: wire up x,y coords
-
-        this.data.forEach(item => {
-
-            if (pointer === 0) {
-                attributeData += "defb ";
-            }
-
-            const flash = '0';
-
-            attributeData += parseInt(`${flash}${item.brightness}${item.paper}${item.ink}`, 2);
-
-            pointer++;
-
-            if (pointer === this.width) {
-                attributeData += '\n';
-                pointer = 0;
-            } else if (byte.length === 0) {
-                attributeData += ',';
-            }
-        });
-
-        exportAttributeData.textContent = attributeData;
     }
 
     createPaletteColorItem(id) {
@@ -233,10 +164,10 @@ class LoFiEditor {
             const parent = document.getElementById('ink');
 
             parent.childNodes.forEach((node) => {
-                node.className = 'palette-item';
+                node.className = 'btn palette-item';
             })
 
-            item.setAttribute("class", 'palette-item selected');
+            item.setAttribute("class", 'btn palette-item selected');
 
         })
     }
@@ -251,10 +182,10 @@ class LoFiEditor {
             const parent = document.getElementById('paper');
 
             parent.childNodes.forEach((node) => {
-                node.className = 'palette-item';
+                node.className = 'btn palette-item';
             })
 
-            item.setAttribute("class", 'palette-item selected');
+            item.setAttribute("class", 'btn palette-item selected');
         })
     }
 
@@ -264,7 +195,6 @@ class LoFiEditor {
 
         if (this.tool === 'pen' && this.mode !== 'characters') {
 
-            console.log("painting attrs");
             attribute.setAttribute(
                 "class",
                 'character'
@@ -281,8 +211,6 @@ class LoFiEditor {
 
         if (this.tool === 'eraser' && this.mode !== 'characters') {
 
-            console.log("erasin attrs");
-
             attribute.setAttribute(
                 "class",
                 'character'
@@ -296,13 +224,11 @@ class LoFiEditor {
         }
 
         if (this.tool === 'pen' && this.mode !== 'attributes') {
-            console.log("painting chars");
             pixel.setAttribute("class", 'bit1');
             pixel.setAttribute("bit", '1');
         }
 
         if (this.tool === 'eraser' && this.mode !== 'attributes') {
-            console.log("erasing chasr");
             pixel.setAttribute("class", 'bit0');
             pixel.setAttribute("bit", '0');
         }
@@ -326,7 +252,7 @@ class LoFiEditor {
 
         let uid = attribute.getAttribute("uid");
 
-        let match = this.data.find((item) => item.uid === uid);
+        let match = this.data.map.find((item) => item.uid === uid);
 
         if (match) {
             match.brightness = attribute.getAttribute("brightness");
@@ -337,14 +263,17 @@ class LoFiEditor {
     }
 
     createData(width, height) {
-        
+
+        this.data.width = 32;
+        this.data.height = 24;
+
         for (let i = 0; i < height; i++) {
 
             for (let j = 0; j < width; j++) {
 
                 const uid = j + 'x' + i;
 
-                this.data.push({
+                this.data.map.push({
                     uid,
                     brightness: '0',
                     bits: '0000',
@@ -355,24 +284,28 @@ class LoFiEditor {
         }
     }
 
-    resizeData(width, height, data) {
+    resizeData(data) {
 
-        const dataCopy = this.getArrayClone(data);
+        const dataCopy = this.getDataClone(data);
 
-        this.data = [];
+        this.data = {
+            width: dataCopy.width,
+            height: dataCopy.height,
+            map: []
+        };
 
-        for (let i = 0; i < height; i++) {
+        for (let i = 0; i < this.data.height; i++) {
 
-            for (let j = 0; j < width; j++) {
+            for (let j = 0; j < this.data.width; j++) {
 
                 const uid = j + 'x' + i;
 
-                const match = dataCopy.find(item => item.uid === uid);
+                const match = dataCopy.map.find(item => item.uid === uid);
 
                 if (match) {
-                    this.data.push(match);
+                    this.data.map.push(match);
                 } else {
-                    this.data.push({
+                    this.data.map.push({
                         uid,
                         brightness: '0',
                         bits: '0000',
@@ -388,9 +321,9 @@ class LoFiEditor {
 
         this.canvas.innerHTML = '';
 
-        this.canvas.setAttribute("style", "width:" + (this.width * 20) + 'px');
+        this.canvas.setAttribute("style", "width:" + (data.width * 20) + 'px');
 
-        data.forEach(item => {
+        data.map.forEach(item => {
 
             const map = this.getColorsFromBinary();
 
@@ -446,15 +379,15 @@ class LoFiEditor {
     }
 
     saveDataToHistory() {
-        this.history.push({
-            width: this.width,
-            height: this.height,
-            data: this.data.map(a => ({...a}))
-        });
+        this.history.push(this.getDataClone(this.data));
     }
 
-    getArrayClone(data) {
-        return data.map(a => ({...a}));
+    getDataClone(data) {
+        return {
+            width: this.data.width,
+            height: this.data.height,
+            map: data.map.map(a => ({...a}))
+        };
     }
 
     undo() {
@@ -464,17 +397,19 @@ class LoFiEditor {
 
         const lastHistoryEntry = this.history.pop();
 
-        this.data = lastHistoryEntry.data;
-        this.width = lastHistoryEntry.width;
-        this.height = lastHistoryEntry.height;
+        this.data = lastHistoryEntry;
+        this.restoreDimensionsInputs();
+
+        this.createCanvas(this.data);
+    }
+
+    restoreDimensionsInputs() {
 
         const widthElement = document.getElementById("canvas-width");
         const heightElement = document.getElementById("canvas-height");
 
-        widthElement.value = lastHistoryEntry.width;
-        heightElement.value = lastHistoryEntry.height;
-
-        this.createCanvas(this.data);
+        widthElement.value = this.data.width;
+        heightElement.value = this.data.height;
     }
 
     getColorsFromBinary() {

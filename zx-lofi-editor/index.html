@@ -1,39 +1,55 @@
 <html>
 <head>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
+<h1>ZX Lo-Fi editor</h1>
 
-<p>Canvas size</p>
-<small>This is number of characters. Max: width: 32, height: 64. Resizing it destroys previous canvas.</small>
-<div id="canvas-size">
-    <label for="canvas-width">width: </label> <input type="number" id="canvas-width" value="32">
-    <label for="canvas-height">height: </label> <input type="number" id="canvas-height" value="24">
-    <button id="canvas-resize">resize</button>
-</div>
-
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light">
     <div id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item active">
-                <form class="form-inline" id="mode">
-                    <span class="navbar-text">Mode</span>
-                    <div class="btn-group" role="group">
-                        <button id="mode-characters" class="btn" type="button">Chars</button>
-                        <button id="mode-attributes" class="btn" type="button">Attrs</button>
-                        <button id="mode-both" class="btn" type="button">Both</button>
+            <li class="nav-item">
+                <form class="form-group form-inline" id="canvas-size">
+
+                    <div class="input-group input-group-sm">
+                        <label for="canvas-width" class="navbar-text">width: </label>
+                        <input class="form-control" type="number" id="canvas-width" value="32">
+
+                        <label for="canvas-height" class="navbar-text">height: </label>
+                        <input class="form-control" type="number" id="canvas-height" value="24">
+
+                        <button id="canvas-resize" type="button" class="btn btn-sm ml-1">resize</button>
                     </div>
                 </form>
             </li>
             <li class="nav-item">
                 <form class="form-inline">
-                    <span class="navbar-text">Brightness</span>
-                    <div class="btn-group" role="group" id="brightness">
-                        <button id="brightness-button" class="btn" type="button">normal</button>
+                    <span class="navbar-text">Tools</span>
+                    <div class="btn-group form-group" role="group" id="tools">
+                        <button id="tool-pen" class="btn btn-sm" type="button">Pen</button>
+                        <button id="tool-eraser" class="btn btn-sm" type="button">Eraser</button>
+                    </div>
+                    <button id="tool-undo" class="btn btn-sm ml-2" type="button">Undo</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div id="navbar-colors">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <form class="form-inline" id="mode">
+                    <span class="navbar-text">Paint mode</span>
+                    <div class="btn-group" role="group">
+                        <button id="mode-characters" class="btn btn-sm" type="button">Chars</button>
+                        <button id="mode-attributes" class="btn btn-sm" type="button">Attrs</button>
+                        <button id="mode-both" class="btn btn-sm" type="button">Both</button>
                     </div>
                 </form>
             </li>
@@ -67,34 +83,113 @@
                     </div>
                 </form>
             </li>
-            <form class="form-inline">
-                <span class="navbar-text">Tools</span>
-                <div class="btn-group" role="group" id="tools">
-                    <button id="tool-pen" class="btn" type="button">Pen</button>
-                    <button id="tool-eraser" class="btn" type="button">Eraser</button>
+            <li class="nav-item">
+                <form class="form-inline">
+                    <span class="navbar-text">Brightness</span>
+                    <div class="btn-group" role="group" id="brightness">
+                        <button id="brightness-button" class="btn btn-sm" type="button">normal</button>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div id="navbar-io">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <form class="form-inline">
+                    <div class="form-group input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Save file</span>
+                        </div>
+                        <input class="form-control" type="text" id="save-name" value="default">
+                        <div class="input-group-append">
+                            <button type="button"
+                                    id="save-button"
+                                    class="btn btn-primary btn-sm mr-2">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group input-group input-group-sm">
+                        <label class="btn btn-primary btn-sm">
+                            Load File
+                            <input type="file" id="file-selector" hidden>
+                        </label>
+
+                    </div>
+                </form>
+            </li>
+            <li class="nav-item ml-2">
+                <div class="form-group input-group input-group-sm">
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            data-toggle="modal"
+                            data-target="#export-modal">
+                        Export .asm
+                    </button>
                 </div>
-                <button id="tool-undo" class="btn" type="button">Undo</button>
-            </form>
+            </li>
         </ul>
     </div>
 </nav>
 
 <div id="canvas"></div>
 
-<div id="export">
-    <p>Export to ASM</p>
 
-    <label for="export-name">Name: </label> <input type="text" id="export-name" value="default">
+<div class="modal fade" id="export-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Export to ASM</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="export">
 
-    <button id="export-button">Export</button>
+                    <div class="form-group">
 
-    <textarea id="export-character-data"></textarea>
-    <textarea id="export-attribute-data"></textarea>
+                        <label for="export-name">Name: </label>
+                        <input type="text"
+                               id="export-name"
+                               class="form-control"
+                               value="default">
+                        <button id="export-button"
+                                type="button"
+                                class="btn mt-2">Export
+                        </button>
+                    </div>
 
+                    <textarea id="export-data"></textarea>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 </body>
 
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script type="application/javascript" src="lo-fi-export.js"></script>
+<script type="application/javascript" src="lo-fi-io.js"></script>
 <script type="application/javascript" src="index.js"></script>
 
 </html>

@@ -8,7 +8,7 @@ image_address:
         ld b, 1
 main_loop:
         push bc
-        call lsss_aa
+        call test_routine
         pop bc
         djnz main_loop
         ret

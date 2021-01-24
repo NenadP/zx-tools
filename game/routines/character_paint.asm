@@ -5,7 +5,6 @@ print_image:                          ; print the characters (grahic characters)
 
         ld a, 0x16                     ; positions intially the first character on xpos and ypos
         rst 0x10
-        ld ix, (image_address)
         ld a, (ix+3)                  ; ypos
         rst 0x10
         ld a, (ix+2)                  ; y xpos
@@ -20,7 +19,7 @@ image_line_loop:
         push bc
         push ix
         ld ix, (image_address)
-        ld b, (ix+1)                  ; load number of characters in the line
+        ld b, (ix)                  ; load number of characters in the line
         srl b                         ; divide by 2, as we will be printing 2 characters in one go
         pop ix
 image_char_loop:
