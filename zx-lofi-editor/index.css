@@ -2,6 +2,12 @@ html {
     background-color: #e7e7e7;
 }
 
+#toolbar {
+
+}
+#toolbar p, #toolbar .tool-item {
+
+}
 #canvas {
     width: 640px;
 }
@@ -14,16 +20,9 @@ p {
     width: 100px;
 }
 
-#canvas, #ink, #paper, #tools, #brightness, #canvas-size, #export {
+#canvas, #ink, #paper, #tools, #brightness, #canvas-size, #export, #mode {
     display: block;
     clear: both;
-    padding: 10px;
-    padding-bottom: 20px;
-}
-
-
-#ink .palette-item, #paper .palette-item {
-    float: left;
 }
 
 .palette-item {
@@ -33,16 +32,11 @@ p {
 }
 
 .palette-item:hover {
-    cursor: pointer;
-    width: 22px;
-    height: 22px;
     border: 1px solid black;
 }
 
-.palette-item.selected::after {
-    content: "*";
-    color: #868686;
-    font-size: 20px;
+.palette-item.selected {
+    border: 1px solid black;
 }
 
 #paper-black, #ink-black, .ink-black .bit1, .paper-black .bit0 {
@@ -109,7 +103,7 @@ p {
     float: left;
     width: 20px;
     height: 20px;
-    outline:1px #9fb0c6 solid;
+    outline:1px #9fb0c6 solid !important;
 }
 
 #canvas .bit0, #canvas .bit1 {
@@ -118,8 +112,8 @@ p {
     height: 10px;
 }
 #canvas .bit0:hover, #canvas .bit1:hover {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border: 1px solid #868686;
 }
 

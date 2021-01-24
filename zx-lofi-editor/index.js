@@ -7,10 +7,12 @@ class LoFiEditor {
     ink = 'black';
     paper = 'white';
     tool = 'pen';
+    mode = 'characters';
     isPainting = false;
     brightness = '0';
     width = 32;
     height = 24;
+    name = 'default';
 
     constructor() {
 
@@ -18,6 +20,7 @@ class LoFiEditor {
         this.setTools();
         this.setResize();
         this.setExport();
+        this.setMode();
 
         this.createData(this.width, this.height);
 
@@ -34,15 +37,15 @@ class LoFiEditor {
 
             toggle.innerText = this.brightness === '1' ? 'bright' : 'normal';
 
-            const inks = document.getElementById("inks");
-            const papers = document.getElementById("bg_inks");
+            const ink = document.getElementById("ink");
+            const paper = document.getElementById("paper");
 
             if (this.brightness === '1') {
-                inks.setAttribute("class", "palette-bright");
-                papers.setAttribute("class", "palette-bright");
+                ink.setAttribute("class", "palette-bright");
+                paper.setAttribute("class", "palette-bright");
             } else {
-                inks.removeAttribute("class");
-                papers.removeAttribute("class");
+                ink.removeAttribute("class");
+                paper.removeAttribute("class");
             }
         });
     }
@@ -85,6 +88,26 @@ class LoFiEditor {
         })
     }
 
+    setMode() {
+
+        const modeCharacters = document.getElementById("mode-characters");
+        const modeAttributes = document.getElementById("mode-attributes");
+        const modeBoth = document.getElementById("mode-both");
+
+
+        modeCharacters.addEventListener("click", (e) => {
+            this.mode = 'characters';
+        });
+
+        modeAttributes.addEventListener("click", (e) => {
+            this.mode = 'attributes';
+        })
+
+        modeBoth.addEventListener("click", (e) => {
+            this.mode = 'both';
+        });
+    }
+
     setResize() {
 
         const resize = document.getElementById("canvas-resize");
@@ -93,11 +116,11 @@ class LoFiEditor {
 
 
         width.oninput = () => {
-            this.width = width.value;
+            this.width = parseInt(width.value, 10);
         }
 
         height.oninput = () => {
-            this.height = height.value;
+            this.height = parseInt(height.value, 10);
         }
 
         resize.addEventListener("click", () => {
@@ -111,6 +134,13 @@ class LoFiEditor {
     setExport() {
 
         const exportButton = document.getElementById("export-button");
+
+        const name = document.getElementById("export-name");
+
+
+        name.oninput = () => {
+            this.name = name.value;
+        }
 
         exportButton.addEventListener("click", () => {
 
@@ -128,6 +158,10 @@ class LoFiEditor {
         let pointer = 0;
         let byte = '';
 
+        characterData = `char_${this.name}:\n`;
+        characterData += `defb ${this.width},${this.height}\n`;
+        characterData += `defb 0,0\n`; // TODO: wire up x,y coords
+
         this.data.forEach(item => {
 
             if (pointer === 0) {
@@ -143,7 +177,7 @@ class LoFiEditor {
 
             pointer++;
 
-            if (pointer === 32) {
+            if (pointer === this.width) {
                 characterData += '\n';
                 pointer = 0;
             } else if (byte.length === 0) {
@@ -158,10 +192,13 @@ class LoFiEditor {
 
         const exportAttributeData = document.getElementById("export-attribute-data");
 
-        let attributeData = '';
+        let attributeData = `attr_${this.name}:\n`;
 
         let pointer = 0;
         let byte = '';
+
+        attributeData += `defb ${this.width},${this.height}\n`;
+        attributeData += `defb 0,0\n`; // TODO: wire up x,y coords
 
         this.data.forEach(item => {
 
@@ -175,7 +212,7 @@ class LoFiEditor {
 
             pointer++;
 
-            if (pointer === 32) {
+            if (pointer === this.width) {
                 attributeData += '\n';
                 pointer = 0;
             } else if (byte.length === 0) {
@@ -225,18 +262,47 @@ class LoFiEditor {
 
         const map = this.getBinaryFromColors();
 
-        attribute.setAttribute("class", 'character' + ' ink-' + this.ink + ' paper-' + this.paper + ' ' +
-            (this.brightness === '1' ? 'br' : ''));
+        if (this.tool === 'pen' && this.mode !== 'characters') {
 
-        attribute.setAttribute('ink', map[this.ink]);
-        attribute.setAttribute('paper', map[this.paper]);
-        attribute.setAttribute('brightness', this.brightness);
+            console.log("painting attrs");
+            attribute.setAttribute(
+                "class",
+                'character'
+                + ' ink-' + this.ink
+                + ' paper-' + this.paper
+                + ' ' +
+                (this.brightness === '1' ? 'br' : '')
+            );
 
-        if (this.tool === 'pen') {
+            attribute.setAttribute('ink', map[this.ink]);
+            attribute.setAttribute('paper', map[this.paper]);
+            attribute.setAttribute('brightness', this.brightness);
+        }
+
+        if (this.tool === 'eraser' && this.mode !== 'characters') {
+
+            console.log("erasin attrs");
+
+            attribute.setAttribute(
+                "class",
+                'character'
+                + ' ink-black'
+                + ' paper-white'
+            );
+
+            attribute.setAttribute('ink', '000');
+            attribute.setAttribute('paper', '111');
+            attribute.setAttribute('brightness', '0');
+        }
+
+        if (this.tool === 'pen' && this.mode !== 'attributes') {
+            console.log("painting chars");
             pixel.setAttribute("class", 'bit1');
             pixel.setAttribute("bit", '1');
         }
-        if (this.tool === 'eraser') {
+
+        if (this.tool === 'eraser' && this.mode !== 'attributes') {
+            console.log("erasing chasr");
             pixel.setAttribute("class", 'bit0');
             pixel.setAttribute("bit", '0');
         }
@@ -294,6 +360,7 @@ class LoFiEditor {
         const dataCopy = this.getArrayClone(data);
 
         this.data = [];
+
         for (let i = 0; i < height; i++) {
 
             for (let j = 0; j < width; j++) {
@@ -339,7 +406,7 @@ class LoFiEditor {
 
                 e.stopPropagation();
                 if (!this.isPainting) return;
-                attribute.setAttribute("class", 'character' + ' ink-' + this.ink + ' paper-' + this.paper);
+              //  attribute.setAttribute("class", 'character' + ' ink-' + this.ink + ' paper-' + this.paper);
             })
 
             for (let k = 0; k < 4; k++) {

@@ -1,6 +1,7 @@
 <html>
 <head>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -14,46 +15,76 @@
     <button id="canvas-resize">resize</button>
 </div>
 
-<p>Brightness</p>
-<div id="brightness">
-    <button id="brightness-button">normal</button>
-</div>
 
-<p>Ink</p>
-<div id="ink">
-    <div id="ink-black" class="palette-item selected"></div>
-    <div id="ink-blue" class="palette-item"></div>
-    <div id="ink-red" class="palette-item"></div>
-    <div id="ink-pink" class="palette-item"></div>
-    <div id="ink-green" class="palette-item"></div>
-    <div id="ink-cyan" class="palette-item"></div>
-    <div id="ink-yellow" class="palette-item"></div>
-    <div id="ink-white" class="palette-item"></div>
-</div>
-
-<p>Paper</p>
-<div id="paper">
-    <div id="paper-black" class="palette-item"></div>
-    <div id="paper-blue" class="palette-item"></div>
-    <div id="paper-red" class="palette-item"></div>
-    <div id="paper-pink" class="palette-item"></div>
-    <div id="paper-green" class="palette-item"></div>
-    <div id="paper-cyan" class="palette-item"></div>
-    <div id="paper-yellow" class="palette-item"></div>
-    <div id="paper-white" class="palette-item selected"></div>
-</div>
-
-<p>Tools</p>
-<div id="tools">
-    <button id="tool-pen">Pen</button>
-    <button id="tool-eraser">Eraser</button>
-    <button id="tool-undo">Undo</button>
-</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <form class="form-inline" id="mode">
+                    <span class="navbar-text">Mode</span>
+                    <div class="btn-group" role="group">
+                        <button id="mode-characters" class="btn" type="button">Chars</button>
+                        <button id="mode-attributes" class="btn" type="button">Attrs</button>
+                        <button id="mode-both" class="btn" type="button">Both</button>
+                    </div>
+                </form>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline">
+                    <span class="navbar-text">Brightness</span>
+                    <div class="btn-group" role="group" id="brightness">
+                        <button id="brightness-button" class="btn" type="button">normal</button>
+                    </div>
+                </form>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline">
+                    <span class="navbar-text">Ink</span>
+                    <div class="btn-group" role="group" id="ink">
+                        <button id="ink-black" class="btn palette-item selected" type="button"></button>
+                        <button id="ink-blue" class="btn palette-item" type="button"></button>
+                        <button id="ink-red" class="btn palette-item" type="button"></button>
+                        <button id="ink-pink" class="btn palette-item" type="button"></button>
+                        <button id="ink-green" class="btn palette-item" type="button"></button>
+                        <button id="ink-cyan" class="btn palette-item" type="button"></button>
+                        <button id="ink-yellow" class="btn palette-item" type="button"></button>
+                        <button id="ink-white" class="btn palette-item" type="button"></button>
+                    </div>
+                </form>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline">
+                    <span class="navbar-text">Paper</span>
+                    <div class="btn-group" role="group" id="paper">
+                        <button id="paper-black" class="btn palette-item selected" type="button"></button>
+                        <button id="paper-blue" class="btn palette-item" type="button"></button>
+                        <button id="paper-red" class="btn palette-item" type="button"></button>
+                        <button id="paper-pink" class="btn palette-item" type="button"></button>
+                        <button id="paper-green" class="btn palette-item" type="button"></button>
+                        <button id="paper-cyan" class="btn palette-item" type="button"></button>
+                        <button id="paper-yellow" class="btn palette-item" type="button"></button>
+                        <button id="paper-white" class="btn palette-item" type="button"></button>
+                    </div>
+                </form>
+            </li>
+            <form class="form-inline">
+                <span class="navbar-text">Tools</span>
+                <div class="btn-group" role="group" id="tools">
+                    <button id="tool-pen" class="btn" type="button">Pen</button>
+                    <button id="tool-eraser" class="btn" type="button">Eraser</button>
+                </div>
+                <button id="tool-undo" class="btn" type="button">Undo</button>
+            </form>
+        </ul>
+    </div>
+</nav>
 
 <div id="canvas"></div>
 
 <div id="export">
     <p>Export to ASM</p>
+
+    <label for="export-name">Name: </label> <input type="text" id="export-name" value="default">
 
     <button id="export-button">Export</button>
 
