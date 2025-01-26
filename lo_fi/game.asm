@@ -5,7 +5,7 @@
 image_address:
         defb #00, #00
 
-        ld b, 10
+        ld b, 100
 
 main_loop:
         push bc
