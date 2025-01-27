@@ -15,7 +15,7 @@ This assumes you downloaded Pasmo and added it to the path.
 
 Compiling example:
 ```bash 
-pasmo pasmo --name fill_screen --tapbas concepts/screen_layout/fill_screen.asm  taps/fill_screen.tap
+ pasmo --name fill_screen --tapbas concepts/screen_layout/fill_screen.asm  taps/fill_screen.tap
 ```
 
 Repository content: 
