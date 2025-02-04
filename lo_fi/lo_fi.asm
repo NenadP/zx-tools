@@ -28,11 +28,11 @@ test_routine:
 
 
         INCLUDE images/images.asm
-        INCLUDE routines/util/math_util.asm
-        INCLUDE routines/util/print_character.asm
-        INCLUDE routines/util/gfx_util.asm
-        INCLUDE routines/print_attributes.asm
-        INCLUDE routines/print_lofi_image.asm
+        INCLUDE ../routines/math/arithmetic.asm
+        INCLUDE ../routines/gfx/print_character.asm
+        INCLUDE ../routines/gfx/base.asm
+        INCLUDE ./routines/print_attributes.asm
+        INCLUDE ./routines/print_lofi_image.asm
 
 
 END 40000

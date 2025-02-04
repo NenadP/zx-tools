@@ -1,5 +1,5 @@
 ; bc - values to multiply (b * c)
-; mutats: af, de, hl, b
+; mutates: af, de, hl, b
 ; result loaded in hl
 multiply:
         ld hl,0

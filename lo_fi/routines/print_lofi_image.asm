@@ -1,7 +1,7 @@
 character_paint_cursor:
         defb #00, #00
 
-print_lofi_image:                           ; print the characters (grahic characters) based on compressed data.
+print_lofi_image:                           ; print the characters (graphic characters) based on compressed data.
 
         ld ix, (image_address)
         ld d, (ix+3)                        ; y
