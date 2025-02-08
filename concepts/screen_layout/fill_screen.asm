@@ -1,3 +1,15 @@
+;;; ------------------------------------------------------------------
+;;; Routine License
+;;; ------------------------------------------------------------------
+;;;
+;;; Copyright (C) 2025 - present, Nenad Pantic
+;;;
+;;; Permission is granted to use, copy, modify, and distribute
+;;; this software with attribution. Provided "as is", without warranty.
+;;; The author is not liable for any damages resulting from its use.
+;;;
+;;; ------------------------------------------------------------------
+
 ; This routine fills the screen memory with 1s, effectively filling the screen
 ; with ink (black) color. The ZX Spectrum divides the screen into three thirds
 ; of 64 lines each, which don't progress sequentially in memory, but are

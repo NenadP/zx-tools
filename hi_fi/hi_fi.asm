@@ -1,8 +1,20 @@
+;;; ------------------------------------------------------------------
+;;; Routine License
+;;; ------------------------------------------------------------------
+;;;
+;;; Copyright (C) 2025 - present, Nenad Pantic
+;;;
+;;; Permission is granted to use, copy, modify, and distribute
+;;; this software with attribution. Provided "as is", without warranty.
+;;; The author is not liable for any damages resulting from its use.
+;;;
+;;; ------------------------------------------------------------------
+
         org $8000
         call clear_screen
 
 main_loop:
-        call test_routine
+        call test_screen_address_routine
         ret
 
 test_routine:
@@ -11,6 +23,20 @@ test_routine:
         call draw_sprite
         ret
 
+        ld b, 0
+        ld c, 0
+
+; this just draws diagonal set of black blocks.
+test_screen_address_routine:
+        call get_screen_address_from_coords
+        ld (hl), 255
+        inc b
+        inc c
+        ld a, c
+        cp 192
+        jp nz, test_screen_address_routine
+        endless: nop
+        jp endless
 
         INCLUDE sprites.asm
         INCLUDE ../routines/math/arithmetic.asm

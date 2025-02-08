@@ -1,3 +1,15 @@
+;;; ------------------------------------------------------------------
+;;; Routine License
+;;; ------------------------------------------------------------------
+;;;
+;;; Copyright (C) 2025 - present, Nenad Pantic
+;;;
+;;; Permission is granted to use, copy, modify, and distribute
+;;; this software with attribution. Provided "as is", without warranty.
+;;; The author is not liable for any damages resulting from its use.
+;;;
+;;; ------------------------------------------------------------------
+
 screen_address defb $40, $00
 
 sprite_coords_address:

@@ -1,3 +1,16 @@
+/* ------------------------------------------------------------------
+   License
+   ------------------------------------------------------------------
+  
+   Copyright (C) 2025 - present, Nenad Pantic
+  
+   Permission is granted to use, copy, modify, and distribute
+   this software with attribution. Provided "as is", without warranty.
+   The author is not liable for any damages resulting from its use.
+  
+ ------------------------------------------------------------------
+*/
+
 class LoFiEditor {
 
     canvas = document.getElementById("canvas");
@@ -28,7 +41,7 @@ class LoFiEditor {
 
         return this.data;
     }
-    
+
 
     constructor() {
 
@@ -339,7 +352,7 @@ class LoFiEditor {
 
                 e.stopPropagation();
                 if (!this.isPainting) return;
-              //  attribute.setAttribute("class", 'character' + ' ink-' + this.ink + ' paper-' + this.paper);
+                //  attribute.setAttribute("class", 'character' + ' ink-' + this.ink + ' paper-' + this.paper);
             })
 
             for (let k = 0; k < 4; k++) {
@@ -386,7 +399,7 @@ class LoFiEditor {
         return {
             width: this.data.width,
             height: this.data.height,
-            map: data.map.map(a => ({...a}))
+            map: data.map.map(a => ({ ...a }))
         };
     }
 

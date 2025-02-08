@@ -1,3 +1,15 @@
+;;; ------------------------------------------------------------------
+;;; Routine License
+;;; ------------------------------------------------------------------
+;;;
+;;; Copyright (C) 2025 - present, Nenad Pantic
+;;;
+;;; Permission is granted to use, copy, modify, and distribute
+;;; this software with attribution. Provided "as is", without warranty.
+;;; The author is not liable for any damages resulting from its use.
+;;;
+;;; ------------------------------------------------------------------
+
 ; 16px x 16px sprite data
 smiley:
     defb 2, 16                  ; sprite width (in bytes), height (in pixels)

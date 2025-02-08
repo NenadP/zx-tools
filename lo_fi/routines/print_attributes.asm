@@ -1,4 +1,16 @@
 
+;;; ------------------------------------------------------------------
+;;; Routine License
+;;; ------------------------------------------------------------------
+;;;
+;;; Copyright (C) 2025 - present, Nenad Pantic
+;;;
+;;; Permission is granted to use, copy, modify, and distribute
+;;; this software with attribution. Provided "as is", without warranty.
+;;; The author is not liable for any damages resulting from its use.
+;;;
+;;; ------------------------------------------------------------------
+
 print_attributes:                     ; attribute data - load attribute set in ix REGISTER
                                       ; first byte: width, second: height; third: xpos, fourth: ypos; 5th: start of attribute data
         ld ix, (image_address)
