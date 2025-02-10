@@ -19,9 +19,21 @@ test_routine:
         ld hl, smiley
         ld bc, $5959
         call draw_sprite
+
+        ld a, 0
+        ld bc, $0000
+moving_sprite_loop:
         ld hl, smiley
-        ld bc, $6060
+        
+        push af
+        push bc
         call draw_sprite
+        pop bc
+        pop af
+        inc a
+        ld b, a
+        cp 250
+        jp nz, moving_sprite_loop
         ret
 
 

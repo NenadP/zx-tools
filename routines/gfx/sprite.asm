@@ -10,88 +10,51 @@
 ;;;
 ;;; ------------------------------------------------------------------
 
-screen_address defb $40, $00
-
-sprite_coords_address:
-        defb $00, $00
-sprite_size_address:
-        defb $00, $00        
-sprite_data_address:
-        defb $00, $00
-
-unpack_sprite_header:
-    ld a, b
-    ld (sprite_coords_address), a
-    ld a, c
-    ld (sprite_coords_address + 1), a
-
-    ld a, h
-    ld (sprite_size_address), a
-    ld a, l
-    ld (sprite_size_address + 1), a
-
-    inc hl
-    inc hl
-
-    ld a, h
-    ld (sprite_data_address), a
-    ld a, l
-    ld (sprite_data_address + 1), a
-    ret
-
-; hl = sprite data
-; bc = sprite coords
+; Input:  
+; - hl = sprite data
+; - bc = sprite coords
+; operation:
+; bc - keep sprite coords
+; de - sprite size, that is loaded from sprite data. We use this to control looping
+; hl - sprite data, but also at one moment used for screen address
 draw_sprite:
-    call unpack_sprite_header
-    ld a, (sprite_size_address)
-    ld d, a
-    ld a, (sprite_size_address + 1)
-    ld e, a
+    ld a, (hl)             
+    ld d, a                                 ; load x sprite size address into d
+    inc hl
+    ld a, (hl)
+    ld e, a                                 ; load y sprite size address into e
+    inc hl                                  ; hl now points to the first sprite data address
     call sprite_y_loop
     ret
 sprite_y_loop:
-    ld b, e
-    push bc
+    push bc                                 ; save bc, de so we can 
+    push de                                 ; reset x size and x coord each y iteration
     call sprite_x_loop
-    pop bc
-    dec b
-    ld e, b
-    djnz sprite_y_loop
+    pop de                                  ; restore bc and de, so we can increase y cord
+    pop bc                                  ; and decrease y size
+
+    inc c                                   ; increase y coord
+    dec e                                   ; decrease y size
+    ld a, e
+    cp 0
+    jp nz, sprite_y_loop
     ret
-
 sprite_x_loop:
-    ld b, d
+    push de
+    ld d, (hl)                              ; load 8 pixels of data into d
+    inc hl                                  ; we can now go to next 8 pixel data address
+    push hl                                 ; push hl, as we are going to load screen address into it
+    call get_screen_address_from_coords     ; address is now in hl
+    ld (hl), d                              ; lod 8 pixels into the screen address
+    pop hl
+    pop de
+    
+    ld a, b                                 ; increase x coord by 8 bytes,
+    add a, 8                                ; as we are going to plot next 8 bytes in the next iteration
+    ld b, a                                   
 
-    ld a, (sprite_data_address)
-    ld h, a
-    ld a, (sprite_data_address + 1)
-    ld l, a
-
-    ld c, (hl)
-    inc hl
-
-    ld a, h
-    ld (sprite_data_address), a
-    ld a, l
-    ld (sprite_data_address + 1), a
-
-    ld a, (screen_address)
-    ld h, a
-    ld a, (screen_address + 1)
-    ld l, a
-
-    ld (hl), c
-    inc hl
-
-    ld a, h
-    ld (screen_address), a
-    ld a, l
-    ld (screen_address + 1), a
-
-    dec b
-    ld d, b
-    djnz sprite_x_loop
+    dec d                                   ; decrease x size
+    ld a, d                                 
+    cp 0                                    ; if x size is 0
+    jp nz, sprite_x_loop                    ; loop back
     ret 
-
-
-

@@ -19,7 +19,7 @@ clear_screen:
         ret
 
 ; Input:        
-; bc = coords data (x, y)
+; - bc = coords data (x, y)
 ; Output: 
 ; - hl = adjusted coords (x, y)
 ; - de = offset (x, y) - offset from the adjusted coords
@@ -30,8 +30,6 @@ clear_screen:
 ; to get to the nearest 8x8 pixel block starting point.
 ; We also calculate the offset from the starting point to the actual x and y coordinates, by storing
 ; the 3 least significant bits of the x and y in d and e.
-ld h, $C
-ld l, $C
 get_adjusted_coords:
         ld a, b
         and %11111000
@@ -49,8 +47,10 @@ get_adjusted_coords:
        and %00000111
         ld e, a
 
+        ret
+
 ; Input:        
-; bc = coords data (x, y)
+; - bc = coords data (x, y)
 ; Output: 
 ; - hl = screen address
 ;
