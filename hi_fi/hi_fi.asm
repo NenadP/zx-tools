@@ -12,21 +12,20 @@
 
         org $8000
         call clear_screen
-
-main_loop:
-        call test_screen_address_routine
+        call test_routine
         ret
 
 test_routine:
         ld hl, smiley
-        ld bc, $0909
+        ld bc, $5959
+        call draw_sprite
+        ld hl, smiley
+        ld bc, $6060
         call draw_sprite
         ret
 
-        ld b, 0
-        ld c, 0
 
-; this just draws diagonal set of black blocks.
+;this just draws diagonal set of black blocks.
 test_screen_address_routine:
         call get_screen_address_from_coords
         ld (hl), 255
@@ -44,5 +43,4 @@ test_screen_address_routine:
         INCLUDE ../routines/gfx/base.asm
         INCLUDE ../routines/gfx/sprite.asm
 
-
-END $8000
+end $8000
