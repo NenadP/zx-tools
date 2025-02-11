@@ -16,10 +16,7 @@
         ret
 
 test_routine:
-        ld hl, smiley
-        ld bc, $5959
-        call draw_sprite
-
+ 
         ld a, 0
         ld bc, $0000
 moving_sprite_loop:
@@ -32,8 +29,28 @@ moving_sprite_loop:
         pop af
         inc a
         ld b, a
-        cp 250
+        ld c, a
+        cp 150
         jp nz, moving_sprite_loop
+        ; now in reverse
+        ld a, 150
+        ld bc, $0000
+        ld b, a
+        ld c, a
+moving_sprite_loop_reverse:
+        ld hl, smiley
+        push af
+        push bc
+        call draw_sprite
+        pop bc
+        pop af
+        dec a
+        ld b, a
+        ld c, a
+        cp 0
+        jp nz, moving_sprite_loop_reverse
+        ; keep looping forever
+        jp moving_sprite_loop
         ret
 
 
