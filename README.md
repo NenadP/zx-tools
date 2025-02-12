@@ -29,4 +29,16 @@ Repository content:
 ![zx-lofi-editor](images/zx-lofi-alpha-1.png)
 
 ## lo_fi
-Routines / programs demonstrating lo-fi graphics on ZX Spectrum.
+Routines / programs demonstrating lo-fi graphics on ZX Spectrum (64px x 128px)
+
+## hi_fi
+Demo of the usage of the graphics routines in full ZX Spectrum resolution (192px x 256px)
+
+## routines
+All re-usable routines are located here:
+
+### gfx
+Graphic routines:
+
+### math
+Mathematical routines (Arithmetic)
